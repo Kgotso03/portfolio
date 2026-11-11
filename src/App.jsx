@@ -6,22 +6,11 @@ import {
 
 // ==========================================
 // 🔗 YOUR PROFILE & SOCIAL LINKS
-// Change these links to your actual accounts:
 // ==========================================
 export const PROFILE_LINKS = {
   linkedin: "https://www.linkedin.com/in/kgotso-dlamini-5b62503b6",
-  github: "https://github.com/",             // Paste your GitHub URL here
-  email: "kgotsodlamini36@gmail.com",           // Paste your email address here
-};
-
-// ==========================================
-// 🔗 YOUR PROFILE & SOCIAL LINKS
-// Change these links to your actual accounts:
-// ==========================================
-export const PROFILE_LINKS = {
-  linkedin: "https://www.linkedin.com/in/kgotso-dlamini-5b62503b6",
-  github: "https://github.com/",             // Paste your GitHub URL here
-  email: "kgotsodlamini36@gmail.com",           // Paste your email address here
+  github: "https://github.com/Kgotso03",
+  email: "kgotsodlamini36@gmail.com",
 };
 
 const projects = [
@@ -135,6 +124,11 @@ function App() {
             <div className="hero-actions">
               <a className="button button-primary" href="#projects">Explore my work <ArrowUpRight size={17} /></a>
               <a className="button button-quiet" href="#contact">Get in touch <Mail size={16} /></a>
+              {PROFILE_LINKS.github && (
+                <a className="button button-quiet" href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">
+                  <Github size={15} /> GitHub
+                </a>
+              )}
               {PROFILE_LINKS.linkedin && (
                 <a className="button button-quiet" href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer">
                   <Linkedin size={15} /> LinkedIn
