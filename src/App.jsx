@@ -53,7 +53,7 @@ function Linkedin({ size = 24, className, ...props }) {
 // ==========================================
 export const PROFILE_LINKS = {
   name: "Kgotso Dlamini",
-  avatar: "https://github.com/Kgotso03.png", // Or "/profile.jpg" in public/ folder
+  avatar: "/profile.jpg",
   linkedin: "https://www.linkedin.com/in/kgotso-dlamini-5b62503b6",
   github: "https://github.com/Kgotso03",
   email: "kgotsodlamini36@gmail.com",
@@ -134,7 +134,14 @@ function App() {
   const [profile, setProfile] = useState(() => {
     try {
       const saved = localStorage.getItem("portfolio_profile");
-      return saved ? { ...PROFILE_LINKS, ...JSON.parse(saved) } : PROFILE_LINKS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (!parsed.avatar || parsed.avatar.includes("github.com/Kgotso03.png")) {
+          parsed.avatar = "/profile.jpg";
+        }
+        return { ...PROFILE_LINKS, ...parsed };
+      }
+      return PROFILE_LINKS;
     } catch {
       return PROFILE_LINKS;
     }
@@ -211,21 +218,7 @@ function App() {
       <main>
         <section className="hero section-wrap" id="home">
           <div className="hero-copy">
-            <div className="hero-avatar-row">
-              <div className="hero-avatar-frame">
-                <img
-                  src={profile.avatar || "https://github.com/Kgotso03.png"}
-                  alt={profile.name || "Kgotso Dlamini"}
-                  className="hero-avatar-img"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "https://ui-avatars.com/api/?name=Kgotso+Dlamini&background=141d33&color=a78bfa&size=200&bold=true";
-                  }}
-                />
-                <span className="avatar-status-badge" title="Available for opportunities" />
-              </div>
-              <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR INTERNSHIP OPPORTUNITIES</div>
-            </div>
+            <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR INTERNSHIP OPPORTUNITIES</div>
             <h1>Turning ideas into<br /><span className="gradient-text">useful software.</span></h1>
             <p className="hero-intro">
               I'm <strong>{profile.name || "Kgotso Dlamini"}</strong>, a Computer Science student and aspiring software developer
@@ -250,6 +243,34 @@ function App() {
               <span>Computer Science · EMCU</span>
             </div>
           </div>
+
+          <div className="hero-portrait-wrap" aria-label="Kgotso Dlamini portrait">
+            <div className="orbit orbit-a" />
+            <div className="orbit orbit-b" />
+            <div className="hero-portrait-card">
+              <div className="hero-portrait-img-box">
+                <img
+                  src={profile.avatar || "/profile.jpg"}
+                  alt={profile.name || "Kgotso Dlamini"}
+                  className="hero-portrait-img"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/profile.jpg";
+                  }}
+                />
+              </div>
+              <div className="hero-portrait-badge">
+                <div className="portrait-badge-status">
+                  <span className="tiny-green" />
+                  <span>Available for work</span>
+                </div>
+                <span className="portrait-badge-location">Based in Eswatini</span>
+              </div>
+            </div>
+            <div className="float-chip chip-top"><Code2 size={16} /><span>Developer</span></div>
+            <div className="float-chip chip-bottom"><BrainCircuit size={17} /><span>Problem Solver</span></div>
+          </div>
+
           <a className="scroll-cue" href="#about"><span>SCROLL TO EXPLORE</span><ChevronDown size={15} /></a>
         </section>
 
