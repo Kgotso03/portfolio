@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import {
   ArrowUpRight, Mail, Menu, X, Code2, Database,
-  BrainCircuit, Globe2, Smartphone, ExternalLink, Download, ChevronDown
+  BrainCircuit, Globe2, Smartphone, ExternalLink, Download, ChevronDown,
+  Copy, Check
 } from "lucide-react";
 
 // Brand icons (independent of lucide-react brand icon deprecation)
@@ -122,7 +123,14 @@ const skills = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const closeMenu = () => setMenuOpen(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(PROFILE_LINKS.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
 
   return (
     <div className="site-shell">
@@ -307,7 +315,40 @@ function App() {
             <span className="section-kicker">05 / CONTACT</span>
             <h2>Have a project or<br />opportunity in mind?</h2>
             <p>I'm interested in connecting with teams, developers and organisations working on meaningful digital solutions.</p>
-            <a className="button button-primary" href={`mailto:${PROFILE_LINKS.email}`}>Send me an email <ArrowUpRight size={17} /></a>
+            <div className="contact-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
+              <a
+                className="button button-primary"
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PROFILE_LINKS.email)}&su=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Write in Gmail <ArrowUpRight size={17} />
+              </a>
+              <a
+                className="button button-quiet"
+                href={`mailto:${PROFILE_LINKS.email}?subject=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
+              >
+                Default Mail App <Mail size={16} />
+              </a>
+              <button
+                type="button"
+                className="button button-quiet"
+                onClick={handleCopyEmail}
+                style={{ cursor: 'pointer', background: copied ? 'rgba(94, 230, 176, 0.15)' : undefined, borderColor: copied ? 'rgba(94, 230, 176, 0.5)' : undefined }}
+              >
+                {copied ? (
+                  <>
+                    <Check size={16} color="#5ee6b0" />
+                    <span style={{ color: '#5ee6b0' }}>Copied {PROFILE_LINKS.email}!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={16} />
+                    <span>Copy email</span>
+                  </>
+                )}
+              </button>
+            </div>
             <div className="contact-links">
               <a href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn <ExternalLink size={13} /></a>
               <a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub <ExternalLink size={13} /></a>
