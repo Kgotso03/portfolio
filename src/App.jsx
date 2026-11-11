@@ -11,6 +11,7 @@ export const PROFILE_LINKS = {
   linkedin: "https://www.linkedin.com/in/kgotso-dlamini-5b62503b6",
   github: "https://github.com/Kgotso03",
   email: "kgotsodlamini36@gmail.com",
+  graduation: "Final-year student · Class of 2026",
 };
 
 const projects = [
@@ -253,7 +254,7 @@ function App() {
             <div><span className="section-kicker">04 / EDUCATION</span><h2>Learning the foundations<br /><span className="muted-heading">to build what comes next.</span></h2></div>
             <div className="education-card">
               <div className="education-icon"><Smartphone size={22} /></div>
-              <div><span className="education-period">BACHELOR'S DEGREE</span><h3>Bachelor of Computer Science</h3><p>Eswatini Medical Christian University (EMCU)</p><span className="education-status">Final-year student · Update graduation year</span></div>
+              <div><span className="education-period">BACHELOR'S DEGREE</span><h3>Bachelor of Computer Science</h3><p>Eswatini Medical Christian University (EMCU)</p><span className="education-status">{PROFILE_LINKS.graduation}</span></div>
             </div>
           </div>
         </section>
