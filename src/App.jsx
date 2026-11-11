@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ArrowUpRight, Mail, Menu, X, Code2, Database,
   BrainCircuit, Globe2, Smartphone, ExternalLink, Download, ChevronDown,
-  Copy, Check
+  Copy, Check, Lock
 } from "lucide-react";
+import AdminPanel from "./AdminPanel.jsx";
 
 // Brand icons (independent of lucide-react brand icon deprecation)
 function Github({ size = 24, className, ...props }) {
@@ -51,6 +52,8 @@ function Linkedin({ size = 24, className, ...props }) {
 // 🔗 YOUR PROFILE & SOCIAL LINKS
 // ==========================================
 export const PROFILE_LINKS = {
+  name: "Kgotso Dlamini",
+  avatar: "https://github.com/Kgotso03.png", // Or "/profile.jpg" in public/ folder
   linkedin: "https://www.linkedin.com/in/kgotso-dlamini-5b62503b6",
   github: "https://github.com/Kgotso03",
   email: "kgotsodlamini36@gmail.com",
@@ -124,10 +127,52 @@ const skills = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
 
+  // Load customizable profile & projects from localStorage or defaults
+  const [profile, setProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem("portfolio_profile");
+      return saved ? { ...PROFILE_LINKS, ...JSON.parse(saved) } : PROFILE_LINKS;
+    } catch {
+      return PROFILE_LINKS;
+    }
+  });
+
+  const [projectList, setProjectList] = useState(() => {
+    try {
+      const saved = localStorage.getItem("portfolio_projects");
+      return saved ? JSON.parse(saved) : projects;
+    } catch {
+      return projects;
+    }
+  });
+
+  const handleUpdateProfile = (newProfile) => {
+    setProfile(newProfile);
+    localStorage.setItem("portfolio_profile", JSON.stringify(newProfile));
+  };
+
+  const handleUpdateProjects = (newProjects) => {
+    setProjectList(newProjects);
+    localStorage.setItem("portfolio_projects", JSON.stringify(newProjects));
+  };
+
+  // Keyboard shortcut Ctrl + Shift + A to open Admin Panel
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+        e.preventDefault();
+        setAdminOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(PROFILE_LINKS.email);
+    navigator.clipboard.writeText(profile.email || PROFILE_LINKS.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2200);
   };
@@ -149,13 +194,13 @@ function App() {
           <a href="#skills" onClick={closeMenu}>Skills</a>
           <a href="#projects" onClick={closeMenu}>Projects</a>
           <a href="#contact" onClick={closeMenu}>Contact</a>
-          {PROFILE_LINKS.linkedin && (
-            <a href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer" title="LinkedIn" aria-label="LinkedIn Profile">
+          {profile.linkedin && (
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" title="LinkedIn" aria-label="LinkedIn Profile">
               <Linkedin size={16} />
             </a>
           )}
-          {PROFILE_LINKS.github && (
-            <a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer" title="GitHub" aria-label="GitHub Profile">
+          {profile.github && (
+            <a href={profile.github} target="_blank" rel="noreferrer" title="GitHub" aria-label="GitHub Profile">
               <Github size={16} />
             </a>
           )}
@@ -166,22 +211,36 @@ function App() {
       <main>
         <section className="hero section-wrap" id="home">
           <div className="hero-copy">
-            <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR INTERNSHIP OPPORTUNITIES</div>
+            <div className="hero-avatar-row">
+              <div className="hero-avatar-frame">
+                <img
+                  src={profile.avatar || "https://github.com/Kgotso03.png"}
+                  alt={profile.name || "Kgotso Dlamini"}
+                  className="hero-avatar-img"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://ui-avatars.com/api/?name=Kgotso+Dlamini&background=141d33&color=a78bfa&size=200&bold=true";
+                  }}
+                />
+                <span className="avatar-status-badge" title="Available for opportunities" />
+              </div>
+              <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR INTERNSHIP OPPORTUNITIES</div>
+            </div>
             <h1>Turning ideas into<br /><span className="gradient-text">useful software.</span></h1>
             <p className="hero-intro">
-              I'm <strong>Kgotso Dlamini</strong>, a Computer Science student and aspiring software developer
+              I'm <strong>{profile.name || "Kgotso Dlamini"}</strong>, a Computer Science student and aspiring software developer
               interested in building practical digital solutions to real-world problems.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#projects">Explore my work <ArrowUpRight size={17} /></a>
               <a className="button button-quiet" href="#contact">Get in touch <Mail size={16} /></a>
-              {PROFILE_LINKS.github && (
-                <a className="button button-quiet" href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">
+              {profile.github && (
+                <a className="button button-quiet" href={profile.github} target="_blank" rel="noreferrer">
                   <Github size={15} /> GitHub
                 </a>
               )}
-              {PROFILE_LINKS.linkedin && (
-                <a className="button button-quiet" href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer">
+              {profile.linkedin && (
+                <a className="button button-quiet" href={profile.linkedin} target="_blank" rel="noreferrer">
                   <Linkedin size={15} /> LinkedIn
                 </a>
               )}
@@ -274,7 +333,7 @@ function App() {
             <p className="heading-description">A selection of academic work, development projects and product concepts. Project status is shown transparently.</p>
           </div>
           <div className="projects-grid">
-            {projects.map(project => (
+            {projectList.map(project => (
               <article className={`project-card accent-${project.accent}`} key={project.number}>
                 <div className="project-top"><span className="project-number">{project.number}</span><span className="project-arrow"><ArrowUpRight size={19} /></span></div>
                 <div className="project-visual">
@@ -304,7 +363,7 @@ function App() {
             <div><span className="section-kicker">04 / EDUCATION</span><h2>Learning the foundations<br /><span className="muted-heading">to build what comes next.</span></h2></div>
             <div className="education-card">
               <div className="education-icon"><Smartphone size={22} /></div>
-              <div><span className="education-period">BACHELOR'S DEGREE</span><h3>Bachelor of Computer Science</h3><p>Eswatini Medical Christian University (EMCU)</p><span className="education-status">{PROFILE_LINKS.graduation}</span></div>
+              <div><span className="education-period">BACHELOR'S DEGREE</span><h3>Bachelor of Computer Science</h3><p>Eswatini Medical Christian University (EMCU)</p><span className="education-status">{profile.graduation || PROFILE_LINKS.graduation}</span></div>
             </div>
           </div>
         </section>
@@ -318,7 +377,7 @@ function App() {
             <div className="contact-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
               <a
                 className="button button-primary"
-                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PROFILE_LINKS.email)}&su=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email || PROFILE_LINKS.email)}&su=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -326,7 +385,7 @@ function App() {
               </a>
               <a
                 className="button button-quiet"
-                href={`mailto:${PROFILE_LINKS.email}?subject=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
+                href={`mailto:${profile.email || PROFILE_LINKS.email}?subject=${encodeURIComponent("Opportunity / Inquiry for Kgotso Dlamini")}`}
               >
                 Default Mail App <Mail size={16} />
               </a>
@@ -339,7 +398,7 @@ function App() {
                 {copied ? (
                   <>
                     <Check size={16} color="#5ee6b0" />
-                    <span style={{ color: '#5ee6b0' }}>Copied {PROFILE_LINKS.email}!</span>
+                    <span style={{ color: '#5ee6b0' }}>Copied {profile.email || PROFILE_LINKS.email}!</span>
                   </>
                 ) : (
                   <>
@@ -350,8 +409,12 @@ function App() {
               </button>
             </div>
             <div className="contact-links">
-              <a href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn <ExternalLink size={13} /></a>
-              <a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub <ExternalLink size={13} /></a>
+              {profile.linkedin && (
+                <a href={profile.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn <ExternalLink size={13} /></a>
+              )}
+              {profile.github && (
+                <a href={profile.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub <ExternalLink size={13} /></a>
+              )}
             </div>
           </div>
         </section>
@@ -360,9 +423,26 @@ function App() {
       <footer className="footer section-wrap">
         <a className="brand footer-brand" href="#home"><span className="brand-mark">K<span>.</span></span><span className="brand-name">KGOTSO<span>DLAMINI</span></span></a>
         <span>Designed to grow with the journey.</span>
+        <button
+          className="admin-trigger-btn"
+          onClick={() => setAdminOpen(true)}
+          title="Open Admin Controls"
+        >
+          <Lock size={12} /> Admin Mode
+        </button>
         <a className="back-top" href="#home">Back to top ↑</a>
-        <span className="copyright">© {new Date().getFullYear()} Kgotso Dlamini</span>
+        <span className="copyright">© {new Date().getFullYear()} {profile.name || "Kgotso Dlamini"}</span>
       </footer>
+
+      {/* Admin Panel Modal */}
+      <AdminPanel
+        isOpen={adminOpen}
+        onClose={() => setAdminOpen(false)}
+        profile={profile}
+        onUpdateProfile={handleUpdateProfile}
+        projects={projectList}
+        onUpdateProjects={handleUpdateProjects}
+      />
     </div>
   );
 }
