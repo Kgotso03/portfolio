@@ -267,8 +267,6 @@ function App() {
                 <span className="portrait-badge-location">Based in Eswatini</span>
               </div>
             </div>
-            <div className="float-chip chip-top"><Code2 size={16} /><span>Developer</span></div>
-            <div className="float-chip chip-bottom"><BrainCircuit size={17} /><span>Problem Solver</span></div>
           </div>
 
           <a className="scroll-cue" href="#about"><span>SCROLL TO EXPLORE</span><ChevronDown size={15} /></a>
