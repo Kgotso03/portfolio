@@ -218,7 +218,6 @@ function App() {
       <main>
         <section className="hero section-wrap" id="home">
           <div className="hero-copy">
-            <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR INTERNSHIP OPPORTUNITIES</div>
             <h1>Turning ideas into<br /><span className="gradient-text">useful software.</span></h1>
             <p className="hero-intro">
               I'm <strong>{profile.name || "Kgotso Dlamini"}</strong>, a Computer Science student and aspiring software developer
