@@ -250,32 +250,6 @@ function App() {
               <span>Computer Science · EMCU</span>
             </div>
           </div>
-          <div className="hero-art" aria-label="Decorative developer code card">
-            <div className="orbit orbit-a" />
-            <div className="orbit orbit-b" />
-            <div className="code-card">
-              <div className="code-card-top">
-                <div className="window-dots"><i /><i /><i /></div>
-                <span>developer.js</span>
-                <span className="code-card-status">● LIVE IDEAS</span>
-              </div>
-              <div className="code-content">
-                <div><span className="line-no">01</span><span className="code-purple">const</span> developer = {'{'}</div>
-                <div><span className="line-no">02</span>&nbsp;&nbsp;name: <span className="code-green">'Kgotso'</span>,</div>
-                <div><span className="line-no">03</span>&nbsp;&nbsp;focus: <span className="code-green">'Software'</span>,</div>
-                <div><span className="line-no">04</span>&nbsp;&nbsp;learning: <span className="code-green">'Always'</span>,</div>
-                <div><span className="line-no">05</span>&nbsp;&nbsp;build: <span className="code-blue">solutions</span></div>
-                <div><span className="line-no">06</span>{'}'};</div>
-                <div className="code-gap"><span className="line-no">07</span><span className="code-purple">function</span> <span className="code-blue">makeItWork</span>() {'{'}</div>
-                <div><span className="line-no">08</span>&nbsp;&nbsp;<span className="code-purple">return</span> <span className="code-green">'Keep building.'</span>;</div>
-                <div><span className="line-no">09</span>{'}'}</div>
-                <div className="cursor-line"><span className="line-no">10</span><span className="typing-cursor" /></div>
-              </div>
-              <div className="code-card-bottom"><span><i className="tiny-green" /> Ready to build</span><span>UTF-8&nbsp; · &nbsp;JavaScript</span></div>
-            </div>
-            <div className="float-chip chip-top"><Code2 size={16} /><span>Build with purpose</span></div>
-            <div className="float-chip chip-bottom"><BrainCircuit size={17} /><span>Curious by nature</span></div>
-          </div>
           <a className="scroll-cue" href="#about"><span>SCROLL TO EXPLORE</span><ChevronDown size={15} /></a>
         </section>
 
